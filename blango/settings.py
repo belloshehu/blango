@@ -88,7 +88,9 @@ class Dev(Configuration):
     # Database
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-    DATABASES = dj_database_url.config(f"sqlite///{BASE_DIR}/sqlite3")
+    DATABASES = {
+        "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR}/db.sqlite3")
+    }
 
 
     # Password validation
@@ -137,6 +139,29 @@ class Dev(Configuration):
     # CRIPY settings
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACKS = "bootstrap5"
+
+    # logging
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "verbose",
+            },
+        },
+        "root": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+    }
 
 
 class Prod(Dev):
